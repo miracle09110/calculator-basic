@@ -7,6 +7,12 @@ class App extends Component {
     result: 0
   }
 
+  addButton = () =>{
+    this.setState({
+      result : this.state.result + 1
+    })
+  }
+
   render(){
     return (
       <div className="App">
@@ -24,7 +30,7 @@ class App extends Component {
           <button>0</button>
         </div>
         <div>
-          <button>+</button>
+          <button onClick={this.addButton}>+</button>
           <button>-</button>
           <button>x</button>
           <button>/</button>
