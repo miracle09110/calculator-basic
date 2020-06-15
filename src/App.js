@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
+import Digit from './Digit/Digit';
+import OperationKey from './OperationKey/OperationKey';
 
 class App extends Component {
 
@@ -10,21 +12,23 @@ class App extends Component {
     currentOperation: null
   }
 
+  digits = [1, 2, 3, 4, 5, 6, 7, 8 ,9, 0];
+  operations = ['+', '-', 'x', '/'];
+
   operationClickHandler = (operation) =>{
-    let firstInput = this.state.currentInput;
-    let result = 0;
-    if (this.state.currentOperation) {
-      result = this.performOperation()
-      firstInput = result;
+    const newState = {
+      ...this.state
+    }
+    newState.previousInput = newState.currentInput;
+    newState.currentInput = 0;
+    newState.currentOperation = operation;
+
+    if (newState.currentOperation) {
+      newState.result = this.performOperation()
+      newState.firstInput = newState.result;
     }    
 
-
-    this.setState({ 
-      currentOperation: operation,
-      previousInput: firstInput,
-      currentInput: 0,
-      result: result
-    });
+    this.setState(newState);
   }
 
   performOperation = () =>{
@@ -32,7 +36,7 @@ class App extends Component {
       case '+':
         return this.state.currentInput + this.state.previousInput;
       case '-':
-        return this.state.previousInput- this.state.currentInput;
+        return this.state.previousInput - this.state.currentInput;
       case 'x':
         return this.state.currentInput * this.state.previousInput;
       case '/':
@@ -53,29 +57,24 @@ class App extends Component {
   }
 
   render(){
+
+    const digitsKeys = this.digits.map(digit => {
+      return <Digit key={digit} clicked={() => this.digitClickedHandler(digit)}>{digit}</Digit>
+    }); 
+
+    const operationKeys = this.operations.map(operation => {
+      return <OperationKey key={operation} clicked={() => this.operationClickHandler(operation)}>{operation}</OperationKey>
+    });
+
     return (
       <div className="App">
         <div>Result: {this.state.result}</div>
         <div>First Input: {this.state.currentInput}</div>
         <div>Operation: {this.state.currentOperation}</div>
         <div>Second Input: {this.state.previousInput}</div>
+        <div>{digitsKeys}</div>
         <div>
-          <button onClick={() => this.digitClickedHandler(1)}>1</button>
-          <button onClick={() => this.digitClickedHandler(2)}>2</button>
-          <button onClick={() => this.digitClickedHandler(3)}>3</button>
-          <button onClick={() => this.digitClickedHandler(4)}>4</button>
-          <button onClick={() => this.digitClickedHandler(5)}>5</button>
-          <button onClick={() => this.digitClickedHandler(6)}>6</button>
-          <button onClick={() => this.digitClickedHandler(7)}>7</button>
-          <button onClick={() => this.digitClickedHandler(8)}>8</button>
-          <button onClick={() => this.digitClickedHandler(9)}>9</button>
-          <button onClick={() => this.digitClickedHandler(0)}>0</button>
-        </div>
-        <div>
-          <button onClick={() => this.operationClickHandler('+')}>+</button>
-          <button onClick={() => this.operationClickHandler('-')}>-</button>
-          <button onClick={() => this.operationClickHandler('x')}>x</button>
-          <button onClick={() => this.operationClickHandler('/')}>/</button>
+          {operationKeys}
         </div>
       </div>
     );
