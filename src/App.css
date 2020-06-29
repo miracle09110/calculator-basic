@@ -1,0 +1,9 @@
+.App {
+  margin-top: 300px ;
+  text-align: center;
+}
+
+.App div{
+  padding: 5px;
+  margin: auto 0px;
+}
